@@ -14,6 +14,5 @@ public class Main {
         client.processingResponse(server);
 
         System.out.println(client.getAccumulator());
-
     }
 }
