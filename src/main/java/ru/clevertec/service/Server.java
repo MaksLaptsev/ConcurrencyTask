@@ -17,7 +17,7 @@ public class Server {
     }
 
     public RequestResponse processingRequest(RequestResponse request) throws InterruptedException {
-        Thread.sleep(getRandom());
+        Thread.sleep(getRandomSleepTime());
 
         lock.lock();
         try {
@@ -28,7 +28,7 @@ public class Server {
         }
     }
 
-    private Long getRandom(){
+    private Long getRandomSleepTime(){
         Random random = new Random();
         return random.nextLong(100,1000);
     }

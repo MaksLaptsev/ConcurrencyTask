@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,7 +18,7 @@ public class Client {
     private List<Integer> listValues;
     private List<Future<RequestResponse>> futureList;
     private int accumulator;
-    private volatile AtomicInteger requestCounts;
+    private int requestCounts;
 
     public Client(int requestCounts) {
         executorService = Executors.newFixedThreadPool(5);
@@ -31,12 +30,12 @@ public class Client {
         executorService = Executors.newFixedThreadPool(threadPool);
         listValues = initialList(requestCounts);
         futureList = new ArrayList<>();
-        this.requestCounts = new AtomicInteger(requestCounts);
+        this.requestCounts = requestCounts;
     }
 
     public void processingResponse(Server server){
-        while (requestCounts.get() > 0){
-            requestCounts.decrementAndGet();
+        while (requestCounts > 0){
+            requestCounts -= 1;
             futureList.add(executorService.submit(
                     () -> server.processingRequest(getRandomEntityForRequest())
             ));
